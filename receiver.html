@@ -53,7 +53,7 @@
     }
 
     function onLoad()
-    {
+	{
         log("document loaded");
 
         window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
@@ -69,20 +69,20 @@
 
         log("cast started");
 
-        window.setInterval(onTimer, 2000);
-    }
+    	window.setInterval(onTimer, 2000);
+	}
 
-    function onTimer()
-    {
-        broadcast("timer");
-    }
+	function onTimer()
+	{
+	    broadcast("timer");
+	}
 
     function broadcast(message)
     {
         window.customMessageBus.broadcast(message);
     }
 
-    window.addEventListener("load", onLoad);
+	window.addEventListener("load", onLoad);
 </script>
 
 <body>
