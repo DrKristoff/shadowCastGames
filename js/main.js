@@ -2,9 +2,9 @@ console.log('This would be the main JS file.');
 
 var numPlayers = 0;
 
-//src="images/default-profile.png"
+var defaultProfileImage = 'images/default-profile.png';
 
-var playerTemplateHTML = '<div>' +
+var playerTemplateHTML = '<div class="col-lg-2 col-xl-2">' +
       						'<img id="%PLAYER%" src="%IMG%" width="200" height="200" alt=""/>' +
 			      		    '<h3>%PLAYERNAME%</h3>'+
       			  		'</div>';
@@ -24,4 +24,5 @@ function addPlayer(playerName, imgURL){
 addPlayer("Ryan D", "images/default-profile.png");
 addPlayer("Shane D", "images/default-profile.png");
 addPlayer("Leah D", "images/default-profile.png");
+addPlayer("Samantha", defaultProfileImage);
 
