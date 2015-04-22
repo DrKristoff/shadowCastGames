@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css">
-    <title>Bet on It!</title>
+<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+<title>Bet on It!</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 </head>
 <body>
-
+<div id="root" style="position:absolute; top:0; left:0; height:100%; width:100%; color:#FFFFFF;" />
+    <h1>Chromecast Demo</h1>
+    <br>
+    <div id="playerDiv">
+    </div>
+</div>
 </body>
-</html>
-<html>
+<script src="https://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+<script src="js/main.js"></script>
 
-<script src="https://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js">
-</script>
 <script type="text/javascript">
     var app_id = "711281B8";
     var namespace = "urn:x-cast:com.ls.cast.sample";
@@ -32,6 +37,7 @@
     function onChannelOpened(event)
     {
         log("onChannelOpened. Total number of channels: " + window.castReceiverManager.getSenders().length);
+		addPlayer(event.senderID,'images/default-profile.png');
     }
 
     function onChannelClosed(event)
@@ -54,7 +60,7 @@
 
     function onLoad()
 	{
-        log("document loaded");
+        //log("document loaded");
 
         window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 
@@ -67,7 +73,7 @@
 
         window.castReceiverManager.start();
 
-        log("cast started");
+        //log("cast started");
 
     	window.setInterval(onTimer, 2000);
 	}
@@ -84,12 +90,4 @@
 
 	window.addEventListener("load", onLoad);
 </script>
-
-<body>
-    <div id="root" style="position:absolute; top:0; left:0; height:100%; width:100%; color:#FFFFFF;" />
-        chromecast demo<br>
-        <img src="images/shield.png" width="30" height="30" alt=""/>
-    </div>
-</body>
-
 </html>
