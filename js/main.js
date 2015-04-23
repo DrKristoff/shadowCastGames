@@ -4,7 +4,7 @@ var numPlayers = 0;
 
 var defaultProfileImage = 'images/default-profile.png';
 
-var playerTemplateHTML = '<div class="col-lg-2 col-xl-2">' +
+var playerTemplateHTML = '<div class="col-md-2 col-sm-2 col-lg-2 col-xl-2 img-responsive">' +
       						'<img id="%PLAYER%" src="%IMG%" width="200" height="200" alt=""/>' +
 			      		    '<h3>%PLAYERNAME%</h3>'+
       			  		'</div>';
