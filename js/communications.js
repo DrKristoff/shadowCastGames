@@ -1,24 +1,32 @@
 // JavaScript Document
 
 var app_id = "711281B8";
-var namespace = "urn:x-cast:com.ls.cast.sample";
 
+var namespace =   {
+	"Default":"urn:x-cast:com.ls.cast.sample",
+    "ReadyToBeginGame":	"urn:x-cast:readyToBeginGame",
+    "Guess":  "urn:x-cast:guess",
+    "Bet":	"urn:x-cast:bet",
+    "ReadyToBeginNextRound":"readyToBeginNextRound"
+  };
+  
 function log(str)
 {
 	console.log(str);
 
-	var newSpan = document.createElement("span");
-	var newContent = document.createTextNode(str);
-	newSpan.appendChild(newContent);
+	//var newSpan = document.createElement("span");
+	//var newContent = document.createTextNode(str);
+	//newSpan.appendChild(newContent);
 
-	var root = document.getElementById("root");
-	root.appendChild(newSpan);
-	root.appendChild(document.createElement("br"));
+	//var root = document.getElementById("root");
+	//root.appendChild(newSpan);
+	//root.appendChild(document.createElement("br"));
 }
 
 function onChannelOpened(event)
 {
 	log("onChannelOpened. Total number of channels: " + window.castReceiverManager.getSenders().length);
+	console.log(event);
 	addPlayer(event.senderID,'images/default-profile.png');
 }
 
@@ -37,6 +45,26 @@ function onMessage(event)
 {
 	var message = event.data;
 	var senderId = event.senderId;
+	//Determine Message Type
+	switch(event.namespace){
+		case nameSpace.ReadyToBeginGame:
+			onReadyReceived();
+			break;
+		case nameSpace.Guess:
+			onGuessReceived();
+			break;
+		case nameSpace.Bet:
+			onBetPlaced();
+			break;
+		case nameSpace.ReadyToBeginNextRound:
+			onReadyReceived();
+			break;
+		case nameSpace.Default:
+			break;
+		default:	
+	}
+
+	console.log(event);
 	log("message from: " + senderId + " message: " + message);
 }
 
@@ -49,7 +77,7 @@ function onLoad()
 	window.castReceiverManager.onSenderConnected = onChannelOpened;
 	window.castReceiverManager.onSenderDisconnected = onChannelClosed;
 
-	window.customMessageBus = window.castReceiverManager.getCastMessageBus(namespace);
+	window.customMessageBus = window.castReceiverManager.getCastMessageBus(namespace.Default);
 	window.customMessageBus.onMessage = onMessage;
 
 
@@ -71,3 +99,4 @@ function broadcast(message)
 }
 
 window.addEventListener("load", onLoad);
+
