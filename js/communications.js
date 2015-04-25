@@ -1,6 +1,6 @@
 // JavaScript Document
 
-var app_id = "711281B8";
+var app_id = "896E2978";
 
 var numPlayers = 0;
 
