@@ -95,7 +95,7 @@ function onTimer()
 
 function broadcast(message)
 {
-	window.customMessageBus.broadcast(message);
+	//window.customMessageBus.broadcast(message);
 }
 
 window.addEventListener("load", onLoad);
