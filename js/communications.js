@@ -31,7 +31,7 @@ function onChannelOpened(event)
 	console.log(event);
 	numPlayers = window.castReceiverManager.getSenders().length;
 	console.log(numPlayers);
-	addPlayer(event.message,'images/default-profile.png');
+	
 }
 
 function onChannelClosed(event)
@@ -65,7 +65,8 @@ function onMessage(event)
 		case namespace.ReadyToBeginNextRound:
 			onReadyReceived();
 			break;
-		case nameSpace.Default:
+		case namespace.Default:
+			addPlayer(event.message,'images/default-profile.png');
 			break;
 		default:	
 	}
