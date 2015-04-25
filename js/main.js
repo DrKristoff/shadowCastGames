@@ -21,8 +21,8 @@ function addPlayer(playerName, imgURL){
 	
 }
 
-addPlayer("Ryan D", "images/default-profile.png");
-addPlayer("Shane D", "images/default-profile.png");
-addPlayer("Leah D", "images/default-profile.png");
-addPlayer("Samantha", defaultProfileImage);
+//addPlayer("Ryan D", "images/default-profile.png");
+//addPlayer("Shane D", "images/default-profile.png");
+//addPlayer("Leah D", "images/default-profile.png");
+//addPlayer("Samantha", defaultProfileImage);
 

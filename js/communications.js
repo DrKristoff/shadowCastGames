@@ -2,6 +2,8 @@
 
 var app_id = "711281B8";
 
+var numPlayers = 0;
+
 var namespace =   {
 	"Default":"urn:x-cast:com.ls.cast.sample",
     "ReadyToBeginGame":	"urn:x-cast:readyToBeginGame",
@@ -27,13 +29,17 @@ function onChannelOpened(event)
 {
 	log("onChannelOpened. Total number of channels: " + window.castReceiverManager.getSenders().length);
 	console.log(event);
-	addPlayer(event.senderID,'images/default-profile.png');
+	numPlayers = window.castReceiverManager.getSenders().length;
+	console.log(numPlayers);
+	addPlayer(event.message,'images/default-profile.png');
 }
 
 function onChannelClosed(event)
 {
 	log("onChannelClosed. Total number of channels: " + window.castReceiverManager.getSenders().length);
 	if (window.castReceiverManager.getSenders().length == 0) window.close();
+	numPlayers = window.castReceiverManager.getSenders().length;
+	console.log(numPlayers);
 }
 
 function onError()
@@ -47,16 +53,16 @@ function onMessage(event)
 	var senderId = event.senderId;
 	//Determine Message Type
 	switch(event.namespace){
-		case nameSpace.ReadyToBeginGame:
+		case namespace.ReadyToBeginGame:
 			onReadyReceived();
 			break;
-		case nameSpace.Guess:
+		case namespace.Guess:
 			onGuessReceived();
 			break;
-		case nameSpace.Bet:
+		case namespace.Bet:
 			onBetPlaced();
 			break;
-		case nameSpace.ReadyToBeginNextRound:
+		case namespace.ReadyToBeginNextRound:
 			onReadyReceived();
 			break;
 		case nameSpace.Default:
