@@ -1,11 +1,17 @@
 // JavaScript Document
 
+function onJoin(){
+	log("onJoin");
+};
 
+function onLeave(){
+	log("onLeave");
+};
 
-function onReadyReceived(){
+function onReady(){
 	//check if everyone is ready
 	//when everyone is ready, trigger onAllReady
-	log("onReadyReceived");
+	log("onReady");
 };
 
 function onAllReady(){
@@ -15,6 +21,13 @@ function onAllReady(){
 		//Begin question animation
 		log("onAllReady");
 	
+};
+
+function beginQuestionAnimation(questionString){
+	//Show animation that shows the question
+	log("beginQuestionAnimation");
+	
+	onQuestionAnimationEnd();
 };
 
 function onQuestionAnimationEnd(){

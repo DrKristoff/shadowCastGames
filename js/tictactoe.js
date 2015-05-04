@@ -1,16 +1,36 @@
+// JavaScript Document
+
+/**
+ * Copyright (C) 2014 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Tic Tac Toe Gameplay with Chromecast
+ * This file exposes cast.TicTacToe as an object containing a
+ * CastMessageBus and capable of receiving and sending messages
+ * to the sender application.
+ */
 
 // External namespace for cast specific javascript library
 var cast = window.cast || {};
 
-// Anonymous namespace***********************************************************************************
+// Anonymous namespace
 (function() {
   'use strict';
-  
-    var app_id = "896E2978";
 
-	var numPlayers = 0;
-
-  TicTacToe.PROTOCOL = "urn:x-cast:com.betonit";
+  TicTacToe.PROTOCOL = 'urn:x-cast:com.google.cast.demo.tictactoe';
 
   TicTacToe.PLAYER = {
     O: 'O',
@@ -40,28 +60,6 @@ var cast = window.cast || {};
         this.onSenderDisconnected.bind(this);
     this.castReceiverManager_.start();
   }
-//*********************************************************************************************************
-
-
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//TicTacToe = {
-//	onSenderConnected,
-//	onSenderDisconnected,
-//	onMessage,
-//	onJoin,
-//	onLeave,
-//	sendError,
-//	onBet,
-//	onGuess,
-//	onGameEnded,
-//	broadcastEndGame,
-//	startGame,
-//	broadcast
-//	}
-//
-//
 
 
   // Adds event listening functions to TicTacToe.prototype.
@@ -188,13 +186,95 @@ var cast = window.cast || {};
     },
 
     /**
+     * Move event: checks whether a valid move was made and updates the board
+     * as necessary.
+     * @param {string} senderId the sender that made the move.
+     * @param {Object|string} message contains the row and column of the move.
+     */
+    onMove: function(senderId, message) {
+      console.log('****onMove****');
+      var isMoveValid;
+
+      if ((this.mPlayer1 == -1) || (this.mPlayer2 == -1)) {
+        console.log('Looks like one of the players is not there');
+        console.log('mPlayer1: ' + this.mPlayer1);
+        console.log('mPlayer2: ' + this.mPlayer2);
+        return;
+      }
+
+      if (this.mPlayer1.senderId == senderId) {
+        if (this.mPlayer1.player == this.mCurrentPlayer) {
+          if (this.mPlayer1.player == TicTacToe.PLAYER.X) {
+            isMoveValid = this.mBoard.drawCross(message.row, message.column);
+          } else {
+            isMoveValid = this.mBoard.drawNaught(message.row, message.column);
+          }
+        } else {
+          console.log('Ignoring the move. It\'s not your turn.');
+          this.sendError(senderId, 'It\'s not your turn.');
+          return;
+        }
+      } else if (this.mPlayer2.senderId == senderId) {
+        if (this.mPlayer2.player == this.mCurrentPlayer) {
+          if (this.mPlayer2.player == TicTacToe.PLAYER.X) {
+            isMoveValid = this.mBoard.drawCross(message.row, message.column);
+          } else {
+            isMoveValid = this.mBoard.drawNaught(message.row, message.column);
+          }
+        } else {
+          console.log('Ignoring the move. It\'s not your turn.');
+          this.sendError(senderId, 'It\'s not your turn.');
+          return;
+        }
+      } else {
+        console.log('Ignorning message. Someone other than the current' +
+            'players sent a move.');
+        this.sendError(senderId, 'You are not playing the game');
+        return;
+      }
+
+      if (isMoveValid === false) {
+        this.sendError(senderId, 'Your last move was invalid');
+        return;
+      }
+
+      var isGameOver = this.mBoard.isGameOver();
+      this.broadcast({
+        event: 'moved',
+        player: this.mCurrentPlayer,
+        row: message.row,
+        column: message.column,
+        game_over: isGameOver });
+
+      console.log('isGameOver: ' + isGameOver);
+      console.log('winningLoc: ' + this.mBoard.getWinningLocation());
+
+      // When the game should end
+      if (isGameOver == true) {
+        this.broadcastEndGame(this.mBoard.getGameResult(),
+            this.mBoard.getWinningLocation());
+      }
+      // Switch current player
+      this.mCurrentPlayer = (this.mCurrentPlayer == TicTacToe.PLAYER.X) ?
+          TicTacToe.PLAYER.O : TicTacToe.PLAYER.X;
+    },
+
+    /**
      * Request event for the board layout: sends the current layout of pieces
      * on the board through the channel.
      * @param {string} senderId the sender the event came from.
      */
-    onBet: function(senderId) {
-      console.log('****onBet****');
-
+    onBoardLayoutRequest: function(senderId) {
+      console.log('****onBoardLayoutRequest****');
+      var boardLayout = [];
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          boardLayout[i * 3 + j] = this.mBoard.mBoard[i][j];
+        }
+      }
+      this.castMessageBus_.send(senderId, {
+        'event': 'board_layout_response',
+        'board': boardLayout });
     },
 
     sendError: function(senderId, errorMessage) {
@@ -205,10 +285,12 @@ var cast = window.cast || {};
 
     broadcastEndGame: function(endState, winningLocation) {
       console.log('****endGame****');
-
+      this.mPlayer1 = -1;
+      this.mPlayer2 = -1;
       this.broadcast({
         event: 'endgame',
-        end_state: endState });
+        end_state: endState,
+        winning_location: winningLocation });
     },
 
     /**
@@ -216,7 +298,25 @@ var cast = window.cast || {};
      */
     startGame_: function() {
       console.log('****startGame****');
+      var firstPlayer = Math.floor((Math.random() * 10) % 2);
+      this.mPlayer1.player = (firstPlayer === 0) ?
+          TicTacToe.PLAYER.X : TicTacToe.PLAYER.O;
+      this.mPlayer2.player = (firstPlayer === 0) ?
+          TicTacToe.PLAYER.O : TicTacToe.PLAYER.X;
+      this.mCurrentPlayer = TicTacToe.PLAYER.X;
 
+      this.castMessageBus_.send(
+          this.mPlayer1.senderId, {
+            event: 'joined',
+            player: this.mPlayer1.player,
+            opponent: this.mPlayer2.name
+          });
+      this.castMessageBus_.send(
+          this.mPlayer2.senderId, {
+            event: 'joined',
+            player: this.mPlayer2.player,
+            opponent: this.mPlayer1.name
+          });
     },
 
     /**
@@ -228,25 +328,7 @@ var cast = window.cast || {};
     }
 
   };
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-
 
   // Exposes public functions and APIs
   cast.TicTacToe = TicTacToe;
 })();
-
-
-//EXAMPLE TARGETTED MESSAGING
-
-      //this.castMessageBus_.send(
-//          this.mPlayer1.senderId, {
-//            event: 'joined',
-//            player: this.mPlayer1.player,
-//            opponent: this.mPlayer2.name
-//          });
-//      this.castMessageBus_.send(
-//          this.mPlayer2.senderId, {
-//            event: 'joined',
-//            player: this.mPlayer2.player,
-//            opponent: this.mPlayer1.name
-//          });
