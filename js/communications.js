@@ -10,28 +10,19 @@ var cast = window.cast || {};
 
 	var numPlayers = 0;
 
-  TicTacToe.PROTOCOL = "urn:x-cast:com.betonit";
-
-  TicTacToe.PLAYER = {
-    O: 'O',
-    X: 'X'
-  };
+  BetOnIt.PROTOCOL = "urn:x-cast:com.betonit";
 
   /**
-   * Creates a TicTacToe object.
+   * Creates a BetOnIt object.
    * @param {board} board an optional game board.
    * @constructor
    */
-  function TicTacToe(board) {
-    this.mBoard = board;
-    this.mPlayer1 = -1;
-    this.mPlayer2 = -1;
-    this.mCurrentPlayer;
+  function BetOnIt() {
 
-    console.log('********TicTacToe********');
+    console.log('********BetOnIt********');
     this.castReceiverManager_ = cast.receiver.CastReceiverManager.getInstance();
     this.castMessageBus_ =
-        this.castReceiverManager_.getCastMessageBus(TicTacToe.PROTOCOL,
+        this.castReceiverManager_.getCastMessageBus(BetOnIt.PROTOCOL,
         cast.receiver.CastMessageBus.MessageType.JSON);
     this.castMessageBus_.onMessage = this.onMessage.bind(this);
     this.castReceiverManager_.onSenderConnected =
@@ -46,7 +37,7 @@ var cast = window.cast || {};
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
-//TicTacToe = {
+//BetOnIt = {
 //	onSenderConnected,
 //	onSenderDisconnected,
 //	onMessage,
@@ -64,8 +55,8 @@ var cast = window.cast || {};
 //
 
 
-  // Adds event listening functions to TicTacToe.prototype.
-  TicTacToe.prototype = {
+  // Adds event listening functions to BetOnIt.prototype.
+  BetOnIt.prototype = {
 
     /**
      * Sender Connected event
@@ -109,7 +100,7 @@ var cast = window.cast || {};
 		} else if (message.command == 'ready') {
         this.onReady(senderId);
 		} else if (message.command == 'guess') {
-        this.onGuess(senderId);
+        this.onGuess(senderId, message);
       } else if (message.command == 'bet') {
         this.onBet(senderId, message);
       } else {
@@ -125,45 +116,17 @@ var cast = window.cast || {};
      */
     onJoin: function(senderId, message) {
       console.log('****onJoin****');
-
-      if ((this.mPlayer1 != -1) &&
-          (this.mPlayer1.senderId == senderId)) {
-        this.sendError(senderId, 'You are already ' +
-                       this.mPlayer1.player +
-                       ' You aren\'t allowed to play against yourself.');
-        return;
-      }
-      if ((this.mPlayer2 != -1) &&
-          (this.mPlayer2.senderId == senderId)) {
-        this.sendError(senderId, 'You are already ' +
-                       this.mPlayer2.player +
-                       ' You aren\'t allowed to play against yourself.');
-        return;
-      }
-
-      if (this.mPlayer1 == -1) {
-        this.mPlayer1 = new Object();
-        this.mPlayer1.name = message.name;
-        this.mPlayer1.senderId = senderId;
-      } else if (this.mPlayer2 == -1) {
-        this.mPlayer2 = new Object();
-        this.mPlayer2.name = message.name;
-        this.mPlayer2.senderId = senderId;
-      } else {
-        console.log('Unable to join a full game.');
-        this.sendError(senderId, 'Game is full.');
-        return;
-      }
-
-      console.log('mPlayer1: ' + this.mPlayer1);
-      console.log('mPlayer2: ' + this.mPlayer2);
-
-      if (this.mPlayer1 != -1 && this.mPlayer2 != -1) {
-        this.mBoard.reset();
-        this.startGame_();
-      }
+	  
+	  
     },
-
+	
+	imageLoad: function(message){
+		console.log('*****imageLoad**********');
+		    
+		var arrayBufferView = new Uint8Array( this.response );
+    	var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+		
+	},
     /**
      * Player leave event: determines which player left and unregisters that
      * player, and ends the game if all players are absent.
@@ -172,28 +135,41 @@ var cast = window.cast || {};
     onLeave: function(senderId) {
       console.log('****OnLeave****');
 
-      if (this.mPlayer1 != -1 && this.mPlayer1.senderId == senderId) {
-        this.mPlayer1 = -1;
-      } else if (this.mPlayer2 != -1 && this.mPlayer2.senderId == senderId) {
-        this.mPlayer2 = -1;
-      } else {
-        console.log('Neither player left the game');
-        return;
-      }
-      console.log('mBoard.GameResult: ' + this.mBoard.getGameResult());
-      if (this.mBoard.getGameResult() == -1) {
-        this.mBoard.setGameAbandoned();
-        this.broadcastEndGame(this.mBoard.getGameResult());
-      }
     },
 
     /**
-     * Request event for the board layout: sends the current layout of pieces
-     * on the board through the channel.
+     * add guess to the guessesArray when received
      * @param {string} senderId the sender the event came from.
+	 * @param {int} guess the value of the guess.
      */
-    onBet: function(senderId) {
+    onBet: function(senderId, message) {
       console.log('****onBet****');
+
+    },
+	
+	/**
+     * add guess to the guessesArray when received
+     * @param {string} senderId the sender the event came from.
+	 * @param {int} guess the value of the guess.
+     */
+    onGuess: function(senderId, message) {
+      console.log('****onGuess****');
+	  
+	  var guess = message.guess;
+	  guesses[senderId] = guess;
+	  //check if all guesses have been received, if so, trigger 
+
+    },
+	
+	/**
+     * add guess to the guessesArray when received
+     * @param {string} senderId the sender the event came from.
+	 * @param {int} guess the value of the guess.
+     */
+    onAllGuessesReceived: function() {
+      console.log('****onAllGuessesReceived****');
+	  
+	  //trigger the guess reveal animation
 
     },
 
@@ -209,6 +185,23 @@ var cast = window.cast || {};
       this.broadcast({
         event: 'endgame',
         end_state: endState });
+    },
+	
+	broadcastGuessRequest: function(questionString) {
+      console.log('****GuessRequest****');	  
+	  
+      this.broadcast({
+        event: 'guess_request',
+		question: questionString
+		 });
+    },
+	
+	broadcastBetRequest: function(guessObject) {
+      console.log('****BetRequest****');
+
+      this.broadcast({
+        event: 'bet_request',
+		guesses: guessObject });
     },
 
     /**
@@ -232,7 +225,7 @@ var cast = window.cast || {};
 
 
   // Exposes public functions and APIs
-  cast.TicTacToe = TicTacToe;
+  cast.BetOnIt = BetOnIt;
 })();
 
 

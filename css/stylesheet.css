@@ -1,9 +1,61 @@
 body {
-	background-color: green;
-	height: 100%;
-	width: 100%;
+	background-image: url(../images/felt.jpg);
+	background-repeat: repeat-x repeat-y;
+
 }
 
 #root {
 	margin: 50px;	
+}
+
+#playerDiv div {
+	margin: 10px;	
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 20%;
+  min-height:160px;
+  //background-color: #FFFFFF;
+}
+
+#functionTesting {
+  width: 100%;
+}
+
+.footer .container {
+	margin-left:0px;
+	margin-right:0px;
+	width:100%;
+}
+
+
+button {
+	display: inline-block;
+	height:50px;
+}
+
+.examplePopup {
+	height: 150px;
+	width:250px;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-left:-75px;
+	margin-top:-125px;
+	background:white;
+	color:black;
+}
+
+.roundedCorners {
+    border-radius: 25px;
+    background: #8AC007;
+    padding: 20px; 
+    width: 200px;
+    height: 150px;	
+	margin-left:10px;
+	margin-right:10px;
 }

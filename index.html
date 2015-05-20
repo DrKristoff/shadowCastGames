@@ -4,23 +4,57 @@
 <title>Bet on It!</title>
 
 <!--Bootstrap CSS -->
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/external/bootstrap/bootstrap.min.css">
+
+<!--Modal Window Effects -->
+<link rel="stylesheet" type="text/css" href="css/external/modalWindowEffects/default.css">
+<link rel="stylesheet" type="text/css" href="css/external/modalWindowEffects/component.css">
+
+<!--SweetAlert CSS -->
+<link rel="stylesheet" type="text/css" href="css/external/sweetalert/sweetalert.css">
 
 <!--Custom CSS -->
 <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 
+<!--javascript -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+</script><script src="js/external/bootstrap.min.js"></script>
+<script src="js/external/baraja/modernizr.custom.js"></script>
+
 </head>
 <body>
 <div id="root" style="position:absolute; top:0; left:0; height:100%; width:100%; color:#FFFFFF;" />
-    <h1>Chromecast Demo</h1>
-    <br>
-    <div id="playerDiv">
-    </div>
+<div id="functionTesting">
+  <h1>Test Functions</h1>
+  <button onClick="addTestPlayer()">Add Player</button>
+  <button onClick="removePlayer">Remove Player</button>
+  <button onClick="updateCoins">Update Coins</button>
+  <button onClick="updateBadges">Update Badges</button>
+  <button onClick="sortPlayers()">Players Sort</button>
+  <button onClick="answerSubmit()">Answer Submit</button>
+  <button onClick="spreadCards()">Fan Cards</button>
+  <button onClick="flipCards">Flip Cards</button>
+  <button onClick="addBet">Add Bet</button>
+  <button onClick="testAnimation">Clear Wrong Answers</button>
+  <button onClick="showWinner()">Show Winner</button>
+  <button onClick="newRound()">New Round</button>
+  <button onClick="displayQuestion()">New Question</button>
+  <button onClick="finalRound()">Final Round</button>
+  <button onClick="gameOver()">Game Over</button>
 </div>
+<h1>Chromecast Demo</h1>
+<br>
+<div id="cardsContainer"> 
+
+</div>
+</div>
+<footer class="footer">
+  <div class="playerContainer"></div>
+</footer>
 </body>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+<script src="js/external/sweetalert/sweetalert.min.js"></script>
 <script src="js/main.js"></script>
 <script src="js/communications.js"></script>
-<script src="js/roundControl.js"></script>
+<script src="js/donotuse.js"></script>
 </html>
