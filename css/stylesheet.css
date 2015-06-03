@@ -17,8 +17,8 @@ body {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 20%;
-  min-height:160px;
+  height: 25%;
+  min-height:180px;
   //background-color: #FFFFFF;
 }
 
@@ -50,12 +50,79 @@ button {
 	color:black;
 }
 
-.roundedCorners {
-    border-radius: 25px;
-    background: #8AC007;
-    padding: 20px; 
-    width: 200px;
-    height: 150px;	
-	margin-left:10px;
-	margin-right:10px;
+.back {
+	display: inline-block;
+    border-radius: 7px;
+    background: #B20000;
+    width: 100%;
+	line-height:100%;
+	text-align: center;
+    height: 100%;	
+}
+
+.front span, .back span {
+	position:relative;
+	 display: inline-block;
+	 top:50%;
+	 height:20em; 
+	 margin-top:-20em;
+	  
+}
+
+.front {
+	display: inline-block;
+	position:relative;
+    border-radius: 7px;
+	text-align: center;
+    background: #FFFFFF;
+    width: 100%;
+	line-height:100%;
+	color:black;
+    height: 100%;	
+
+}
+
+.badge{
+	background-image: url("../images/badge.png");
+    position: relative; 
+    top: -0px;
+    Right: -100px;
+    
+	padding: 5px;
+    text-align: center;
+    font-size: 28px;
+}
+
+.numberCircle {
+    border-radius: 50%;
+	right: -120px;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+	position: relative;
+    background: #ff0000;
+    border: 2px solid #666;
+    color: #fff;
+    text-align: center;
+    font: 28px Arial, sans-serif;
+}
+
+.points {
+	background-color:white;
+	width:100px;
+	height:100px;
+	margin-left: auto;
+    margin-right: auto;
+		
+}
+
+.row {
+	margin-left: 40px;	
+}
+
+.card {
+	width: 200px;
+	height: 200px;
+	visibility:hidden;
+	margin:15px;	
 }

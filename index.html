@@ -17,25 +17,33 @@
 <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 
 <!--javascript -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
-</script><script src="js/external/bootstrap.min.js"></script>
-<script src="js/external/baraja/modernizr.custom.js"></script>
-
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+</script>
+<script src="js/external/bootstrap.min.js"></script>
 </head>
-<body>
+<body class="stop-scrolling">
 <div id="root" style="position:absolute; top:0; left:0; height:100%; width:100%; color:#FFFFFF;" />
 <div id="functionTesting">
   <h1>Test Functions</h1>
-  <button onClick="addTestPlayer()">Add Player</button>
-  <button onClick="removePlayer">Remove Player</button>
-  <button onClick="updateCoins">Update Coins</button>
-  <button onClick="updateBadges">Update Badges</button>
-  <button onClick="sortPlayers()">Players Sort</button>
-  <button onClick="answerSubmit()">Answer Submit</button>
-  <button onClick="spreadCards()">Fan Cards</button>
+  <button onClick="p1Connect()">P1 Connect</button>
+  <button onClick="p2Connect()">P2 Connect</button>
+  <button onClick="p3Connect()">P3 Connect</button>
+  <button onClick="p1Ready()">P1 Ready</button>
+  <button onClick="p2Ready()">P2 Ready</button>
+  <button onClick="p3Ready()">P3 Ready</button>
+  <button onClick="p1Answer()">P1 Answer</button>
+  <button onClick="p2Answer()">P2 Answer</button>
+  <button onClick="p3Answer()">P3 Answer</button>
+  <button onClick="p1Bet()">P1 Bet</button>
+  <button onClick="p2Bet()">P2 Bet</button>
+  <button onClick="p3Bet()">P3 Bet</button>
   <button onClick="flipCards">Flip Cards</button>
   <button onClick="addBet">Add Bet</button>
+  <button onClick="sortPlayers()">P1 Ready</button>
+  <button onClick="answerSubmit()">P2 Ready</button>
+  <button onClick="spreadCards()">P3 Ready</button>
   <button onClick="testAnimation">Clear Wrong Answers</button>
+  <button onClick="addTestPlayer()">Add Player</button>
   <button onClick="showWinner()">Show Winner</button>
   <button onClick="newRound()">New Round</button>
   <button onClick="displayQuestion()">New Question</button>
@@ -44,17 +52,44 @@
 </div>
 <h1>Chromecast Demo</h1>
 <br>
-<div id="cardsContainer"> 
-
-</div>
+<div class="row" id="cardsContainer">
+  <div id="card1" class="card col-md-2 col-sm-2 col-lg-2 col-xl-2">
+    <div class="front col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>FRONT</span></div>
+    <div class="back col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>BACK</span></div>
+  </div>
+<div id="card2" class="card col-md-2 col-sm-2 col-lg-2 col-xl-2">
+    <div class="front col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>FRONT</span></div>
+    <div class="back col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>BACK</span></div>
+  </div>
+  <div id="card3" class="card col-md-2 col-sm-2 col-lg-2 col-xl-2">
+    <div class="front col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>FRONT</span></div>
+    <div class="back col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>BACK</span></div>
+  </div>
+  <div id="card4" class="card col-md-2 col-sm-2 col-lg-2 col-xl-2">
+    <div class="front col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>FRONT</span></div>
+    <div class="back col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>BACK</span></div>
+  </div>
+  <div id="card5" class="card col-md-2 col-sm-2 col-lg-2 col-xl-2">
+    <div class="front col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>FRONT</span></div>
+    <div class="back col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>BACK</span></div>
+  </div>
+  <div id="card6" class="card col-md-2 col-sm-2 col-lg-2 col-xl-2">
+    <div class="front col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>FRONT</span></div>
+    <div class="back col-md-2 col-sm-2 col-lg-2 col-xl-2"><span>BACK</span></div>
+  </div>
 </div>
 <footer class="footer">
-  <div class="playerContainer"></div>
+  <div class="row playerContainer"></div>
 </footer>
 </body>
 <script src="https://www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+<script src="js/external/flip/flip.js"></script>
+<script>
+	$('.card').flip();
+</script>
 <script src="js/external/sweetalert/sweetalert.min.js"></script>
 <script src="js/main.js"></script>
 <script src="js/communications.js"></script>
+<script src="js/simulatedCommunication.js"></script>
 <script src="js/donotuse.js"></script>
 </html>

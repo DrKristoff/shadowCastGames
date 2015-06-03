@@ -3,25 +3,24 @@ console.log('This would be the main JS file.');
 
 //variables
 var numPlayers = 0;
+var maxNumPlayers = 6;
 var numCards = 0;
+var numRounds = 0;
+var totalRounds = 4;
 
 var testPlayer = 'Ryan';
 
-var guessObject = {};
+var guesses = {};
 
 var questionString = "";
 
-//var $el = $( '#baraja-el' );
-//var baraja = $el.baraja();
-
-
-
+var playerList = {};
 
 //template HTML
 var defaultProfileImage = 'images/default-profile.png';
 
-var playerTemplateHTML = '<div class="col-md-2 col-sm-2 col-lg-2 col-xl-2 img-responsive">' +
-      						'<img id="%PLAYER%" src="%IMG%" width="100" height="100" alt=""/>' +
+var playerTemplateHTML = '<div id="%PLAYER%" class="col-md-2 col-sm-2 col-lg-2 col-xl-2 img-responsive">' +
+      						'<img src="%IMG%" width="100" height="100" alt=""/>' +
 			      		    '<h3>%PLAYERNAME%</h3>'+
       			  		'</div>';
 
@@ -31,10 +30,12 @@ var popupTemplateHTML = '<div class="examplePopup">' +
 						
 var questionTemplateHTML = '';
 
-var cardTemplateHTML = '<li class="roundedCorners col-md-2 col-sm-2 col-lg-2 col-xl-2 img-responsive">%CONTENT%'+
-						'<img src="images/3.jpg" width="160" height="120" alt="">'+
-						'</li>';
+var cardTemplateHTML = '<div id="card%CONTENT%"class="card">'+
+						'</div>';
+						
+var cardFrontTemplateHTML = '<div class="front col-md-2 col-sm-2 col-lg-2 col-xl-2">FRONT</<div>';
 
+var cardBackTemplateHTML = '<div class="back col-md-2 col-sm-2 col-lg-2 col-xl-2">BACK</<div>';
 
 
 
@@ -43,12 +44,9 @@ function showWinner(){
 	displayPopup("You are the Winner!",2000,1,1);
 }
 
-function newRound(){
-	displayPopup("NEXT ROUND!",2000,1,1);
-}
-
 function displayQuestion(){
-	displayPopup("Question:  How many bla bla bla?",2000,1,1);
+	swal({title: "Question",text: "How many bla bla bla?"});
+	$('.sweet-alert').find('.sa-button-container').remove();
 }
 
 function finalRound(){
@@ -71,21 +69,26 @@ function gameOver(){
 }
 
 function sortPlayers(){
-	$('#cardsContainer').mixItUp('sort', 'name:asc');	
+	setTimeout(function(){
+		$(".card").flip(true);
+	}, 500);
+	
+	
 }
 
 function addTestPlayer(){
-	console.log('TEST');
-	addPlayer(testPlayer, returnRandomImage());
+	displayPlayer(testPlayer, returnRandomImage());
 }
 
 
 //functions
-function addPlayer(playerName, imgURL){
-	console.log(playerName);
-	console.log(imgURL);
+function displayPlayer(playerName, imgURL){
+	if(numPlayers == maxNumPlayers){
+		console.log("Max players reached");
+	return;	
+	}
 	numPlayers = numPlayers + 1;
-	var playerString = "Player " + numPlayers;
+	var playerString = "player" + numPlayers;
 	
 	var playerHTML	= playerTemplateHTML.replace("%PLAYER%",playerString);
 	var playerHTML	= playerHTML.replace("%PLAYERNAME%",playerName);
@@ -98,8 +101,9 @@ function addPlayer(playerName, imgURL){
 function clearSweetAlert(timeout){
 	
 	setTimeout(function(){
-	$('body').removeClass("stop-scrolling");
+	//$('body').removeClass("stop-scrolling");
 	swal.close();
+	$('body').addClass("stop-scrolling");
 	setTimeout(function(){
     	$('.sweet-overlay').remove();
 		$('.sweet-alert').remove();
@@ -109,10 +113,11 @@ function clearSweetAlert(timeout){
 
 function addCard(){
 	numCards = numCards + 1;
-	var cardHTML = cardTemplateHTML.replace("%CONTENT%",numCards);
-	$('#cardsContainer').append(cardHTML);
-	//$el.baraja();
-	//baraja.add($(cardHTML));
+	//var cardHTML = cardTemplateHTML.replace("%CONTENT%",numCards);
+//	$('#cardsContainer').append(cardHTML);
+//	$("#card"+numCards).append(cardFrontTemplateHTML);
+//	$("#card"+numCards).append(cardBackTemplateHTML);
+//	$("#card"+numCards).flip();
 	
 }
 
@@ -131,25 +136,20 @@ function returnRandomImage(){
 
 function spreadCards() {
 
-/*	console.log('trigger');
-	baraja.fan({
-		speed : 500,
-		easing : 'ease-out',
-		range : 0.01,
-		translation: 750,
-		direction : 'right',
-		origin : { x : 0, y : 0, },
-		center : true
-	});
-		
-						
-	baraja.next();*/
-
 
 }
 
-//addPlayer("Ryan D", "images/default-profile.png");
-//addPlayer("Shane D", "images/default-profile.png");
-//addPlayer("Leah D", "images/default-profile.png");
-//addPlayer("Samantha", defaultProfileImage);
-
+function beginNewRound(){
+	if(numRounds > totalRounds){
+		gameOver();
+		return;
+	}
+	
+	guesses = {};
+	displayPopup("NEXT ROUND!",2000,1,1);
+	setTimeout(function(){
+		displayQuestion();	
+		}, 2500);
+	
+	
+}

@@ -60,7 +60,7 @@ var cast = window.cast || {};
 
     /**
      * Sender Connected event
-     * @param {event} event the sender connected event.
+     * @param {event} event the sender Connected event.
      */
     onSenderConnected: function(event) {
       console.log('onSenderConnected. Total number of senders: ' +
@@ -68,9 +68,9 @@ var cast = window.cast || {};
     },
 
     /**
-     * Sender disconnected event; if all senders are disconnected,
+     * Sender Disconnected event; if all senders are Disconnected,
      * closes the application.
-     * @param {event} event the sender disconnected event.
+     * @param {event} event the sender Disconnected event.
      */
     onSenderDisconnected: function(event) {
       console.log('onSenderDisconnected. Total number of senders: ' +
@@ -116,6 +116,8 @@ var cast = window.cast || {};
      */
     onJoin: function(senderId, message) {
       console.log('****onJoin****');
+	  
+	  addPlayer();
 	  
 	  
     },
